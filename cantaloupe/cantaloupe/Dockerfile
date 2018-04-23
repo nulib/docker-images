@@ -34,8 +34,8 @@ RUN curl -O -L -H "Cookie: oraclelicense=accept-securebackup-cookie" \
  && rm jai-1_1_2_01-lib-linux-i586.tar.gz \
  && rm -rf jai-1_1_2_01
 
-#RUN curl -OL https://github.com/medusa-project/cantaloupe/releases/download/v$CANTALOUPE_VERSION/Cantaloupe-$CANTALOUPE_VERSION.zip
-COPY cantaloupe-$CANTALOUPE_VERSION.zip /tmp/cantaloupe-$CANTALOUPE_VERSION.zip
+RUN curl -OL https://github.com/medusa-project/cantaloupe/releases/download/v$CANTALOUPE_VERSION/Cantaloupe-$CANTALOUPE_VERSION.zip
+#COPY cantaloupe-$CANTALOUPE_VERSION.zip /tmp/cantaloupe-$CANTALOUPE_VERSION.zip
 RUN mkdir -p /usr/local/ \
  && cd /usr/local \
  && unzip /tmp/cantaloupe-$CANTALOUPE_VERSION.zip \

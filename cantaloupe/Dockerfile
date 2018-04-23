@@ -7,7 +7,7 @@ FROM openjdk:8-jdk-alpine
 # $ sudo docker build -t cantaloupe .
 # $ sudo docker run -d --rm -p 8183:8182 -v ./images:/var/lib/cantaloupe/images --name cantaloupe cantaloupe
 
-ENV CANTALOUPE_VERSION 4.0-SNAPSHOT
+ENV CANTALOUPE_VERSION 3.4.2
 EXPOSE 8182
 
 RUN apk add --update -X http://dl-cdn.alpinelinux.org/alpine/edge/community \
@@ -34,7 +34,8 @@ RUN curl -O -L -H "Cookie: oraclelicense=accept-securebackup-cookie" \
  && rm jai-1_1_2_01-lib-linux-i586.tar.gz \
  && rm -rf jai-1_1_2_01
 
-RUN curl -OL https://github.com/medusa-project/cantaloupe/releases/download/v$CANTALOUPE_VERSION/Cantaloupe-$CANTALOUPE_VERSION.zip
+RUN curl -L -o cantaloupe-$CANTALOUPE_VERSION.zip \
+  https://github.com/medusa-project/cantaloupe/releases/download/v$CANTALOUPE_VERSION/Cantaloupe-$CANTALOUPE_VERSION.zip
 #COPY cantaloupe-$CANTALOUPE_VERSION.zip /tmp/cantaloupe-$CANTALOUPE_VERSION.zip
 RUN mkdir -p /usr/local/ \
  && cd /usr/local \

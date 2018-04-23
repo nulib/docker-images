@@ -1,0 +1,20 @@
+version: '3.4'
+services:
+  localstack:
+    image: localstack/localstack
+    environment:
+      SERVICES: sqs
+    ports:
+      - "4576:4576"
+  sqsd:
+    image: nulib/sqsd
+    build: .
+    depends_on:
+      - localstack
+    environment:
+      SQSD_WORKER_HTTP_URL: http://172.16.123.1
+      SQSD_QUEUE_URL: http://localstack:4576/queue/local
+      SQSD_SSL_ENABLED: 'false'
+      SQSD_RUN_DAEMONIZED: 'true'
+      AWS_ACCESS_KEY_ID: key
+      AWS_SECRET_ACCESS_KEY: secret

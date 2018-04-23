@@ -1,0 +1,13 @@
+version: '2'
+
+volumes:
+  fedora:
+
+services:
+  fedora:
+    image: nulib/fcrepo4
+    build: .
+    volumes:
+      - fedora:/data
+    ports:
+      - "8984:8080"

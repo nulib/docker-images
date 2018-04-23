@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  cantaloupe:
+    image: nulib/cantaloupe
+    build: ./cantaloupe
+    volumes:
+      - /Users/mbk836/Workspace/donut/tmp/derivatives:/var/lib/cantaloupe/images/
+    ports:
+      - "8182:8182"

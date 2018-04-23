@@ -1,0 +1,14 @@
+version: '2'
+
+volumes:
+  gems:
+
+services:
+  rails:
+    image: nulib/rails
+    build: .
+    volumes:
+      - gems:/home/app/gems
+      - .:/home/app/code
+    ports:
+      - "3000:3000"

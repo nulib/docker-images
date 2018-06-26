@@ -1,14 +1,16 @@
 #!/bin/sh
 
-if [[ "${TIFF_BUCKET}" != "" ]]; then
-  echo <<__EOF__ > /etc/cantaloupe/cantaloupe.properties
+config_file="cantaloupe.properties"
+if [ "${TIFF_BUCKET}" != "" ]; then
+  cat <<__EOF__ > /etc/cantaloupe/cantaloupe_s3.properties
 extends cantaloupe_s3_defaults.properties
-S3Resolver.bucket.name = ${TIFF_BUCKET}
-S3Resolver.endpoint = s3.dualstack.${AWS_REGION}.amazonaws.com
-S3Resolver.access_key_id = ${AWS_ACCESS_KEY_ID}
-S3Resolver.secret_key = ${AWS_SECRET_KEY}
+S3Source.BasicLookupStrategy.bucket.name = ${TIFF_BUCKET}
+S3Source.endpoint = s3.dualstack.${AWS_REGION}.amazonaws.com
+S3Source.access_key_id = ${AWS_ACCESS_KEY_ID}
+S3Source.secret_key = ${AWS_SECRET_KEY}
 __EOF__
+  config_file="cantaloupe_s3.properties"
 fi
 
 jarfile=$(ls /usr/local/cantaloupe/[Cc]antaloupe-$CANTALOUPE_VERSION.war)
-su -c "exec java -Dcantaloupe.config=/etc/cantaloupe/cantaloupe.properties -Xmx2g -jar ${jarfile}" cantaloupe
+su -c "exec java -Dcantaloupe.config=/etc/cantaloupe/${config_file} -Xmx2g -jar ${jarfile}" cantaloupe

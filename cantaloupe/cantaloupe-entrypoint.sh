@@ -2,13 +2,16 @@
 
 config_file="cantaloupe.properties"
 if [ "${TIFF_BUCKET}" != "" ]; then
-  cat <<__EOF__ > /etc/cantaloupe/cantaloupe_s3.properties
-extends cantaloupe_s3_defaults.properties
-S3Source.BasicLookupStrategy.bucket.name = ${TIFF_BUCKET}
-S3Source.endpoint = s3.dualstack.${AWS_REGION}.amazonaws.com
-S3Source.access_key_id = ${AWS_ACCESS_KEY_ID}
-S3Source.secret_key = ${AWS_SECRET_KEY}
-__EOF__
+  echo "extends cantaloupe_s3_defaults.properties" > /etc/cantaloupe/cantaloupe_s3.properties
+  echo "S3Source.BasicLookupStrategy.bucket.name = ${TIFF_BUCKET}" >> /etc/cantaloupe/cantaloupe_s3.properties
+
+  if [ "${AWS_REGION}" != "" ]; then
+    echo "S3Source.endpoint = s3.dualstack.${AWS_REGION}.amazonaws.com" >> /etc/cantaloupe/cantaloupe_s3.properties
+  fi
+  if [ "${AWS_ACCESS_KEY_ID}" != "" ]; then
+    echo "S3Source.access_key_id = ${AWS_ACCESS_KEY_ID}" >> /etc/cantaloupe/cantaloupe_s3.properties
+    echo "S3Source.secret_key = ${AWS_SECRET_KEY}" >> /etc/cantaloupe/cantaloupe_s3.properties
+  fi
   config_file="cantaloupe_s3.properties"
 fi
 

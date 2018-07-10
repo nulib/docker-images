@@ -11,3 +11,4 @@ services:
       - fedora:/data
     ports:
       - "8984:8080"
+      - "61613:61613"

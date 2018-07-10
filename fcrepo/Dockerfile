@@ -7,6 +7,7 @@ ADD         fedora.xml ${JETTY_BASE}/webapps/fedora.xml
 USER        root
 RUN         mkdir -p /data
 RUN         /bin/chown -R jetty:jetty ${JETTY_BASE}/fedora/
+EXPOSE      8080 61613 61616
 ADD         fedora-entrypoint.sh /
 ENTRYPOINT  "/fedora-entrypoint.sh"
 HEALTHCHECK --interval=30s --timeout=5s \

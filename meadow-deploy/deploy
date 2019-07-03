@@ -1,0 +1,12 @@
+#!/bin/bash
+
+APP_NAME=${APP_NAME:-meadow}
+ECS_CLUSTER=${ECS_CLUSTER:-${APP_NAME}}
+ECS_SERVICE=${ECS_SERVICE:-${APP_NAME}}
+ECS_TASK=${ECS_TASK:-"${APP_NAME}-app"}
+ECS_CONTAINER=${ECS_CONTAINER:-${ECS_TASK}}
+
+networkconfig=$(aws ecs describe-services --cluster ${ECS_CLUSTER} --service ${ECS_SERVICE} | jq -cM '.services[0].networkConfiguration')
+overrides="{\"containerOverrides\":[{\"name\":\"${ECS_CONTAINER}\",\"command\":[\"eval\",\"Meadow.ReleaseTasks.migrate()\"]}]}"
+aws ecs run-task --cluster ${ECS_CLUSTER} --task-definition ${ECS_TASK} --overrides ${overrides} --launch-type FARGATE --network-configuration ${networkconfig}
+aws ecs update-service --cluster ${ECS_CLUSTER} --service ${ECS_SERVICE} --force-new-deployment

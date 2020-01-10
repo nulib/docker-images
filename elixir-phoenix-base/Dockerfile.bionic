@@ -1,0 +1,40 @@
+FROM ubuntu:18.04
+
+ENV LANG=en_US.UTF-8 \
+    HOME=/opt/build \
+    TERM=xterm \
+    NODE_VERSION=11.15.0 \
+    YARN_VERSION=1.19.2 \
+    ARCH=x64 \
+    DEBIAN_FRONTEND="noninteractive"
+
+WORKDIR /opt/build
+
+# Dependencies
+RUN apt-get update -y && \
+    apt-get install -y curl git gnupg2 libpq-dev tzdata wget vim locales
+
+# Locale Config
+RUN dpkg-reconfigure -f noninteractive tzdata && \
+    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    echo 'LANG="en_US.UTF-8"'>/etc/default/locale && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_US.UTF-8
+
+# Install Erlang & Elixir
+RUN wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && \
+    dpkg -i erlang-solutions_1.0_all.deb && \
+    rm erlang-solutions_1.0_all.deb && \
+    apt-get update -y && \
+    apt-get install -y erlang elixir
+
+# Hex & Rebar
+RUN mix local.hex --force && \
+    mix local.rebar --force
+
+# NodeJS & Yarn
+RUN curl -sL https://deb.nodesource.com/setup_11.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g yarn
+
+CMD ["/bin/bash"]

@@ -1,9 +1,9 @@
-FROM elixir:1.9-alpine
+FROM elixir:1.10-alpine
 RUN  apk add --update --repository https://dl-3.alpinelinux.org/alpine/edge/testing/ curl git libstdc++ \
   && mix local.hex --force \
   && mix local.rebar --force
-ENV NODE_VERSION 11.15.0
-ENV YARN_VERSION 1.19.2
+ENV NODE_VERSION 13.8.0
+ENV YARN_VERSION 1.22.0
 ENV ARCH x64
 RUN curl -fsSLO --compressed "https://unofficial-builds.nodejs.org/download/release/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH-musl.tar.xz"; \
     tar -xJf "node-v$NODE_VERSION-linux-$ARCH-musl.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \

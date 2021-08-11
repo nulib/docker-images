@@ -3,7 +3,7 @@ volumes:
   ldap:
 services:
   ldap:
-    image: nulib/ldap-alpine
+    image: nulib/ldap-alpine:latest
     build: .
     volumes:
       - ldap:/var/lib/samba

@@ -51,11 +51,12 @@ const app = server();
 app.listen('http://0.0.0.0:8000');
 
 app.post('/fixity', ($) => {
-  if ($.body.EventName === 's3:ObjectCreated:PutTagging') {
+  const record = $.body.Records[0];
+  console.log(`Received ${$.body.EventName}: ${record.s3.bucket.name} / ${record.s3.object.key}`)
+  if ($.body.EventName.match(/^s3:ObjectCreated:.+Tagging$/)) {
     $.status(204, "No Content");
     $.end();
   } else {
-    const record = $.body.Records[0];
     const bucket = decodeURIComponent(record.s3.bucket.name);
     const key = decodeURIComponent(record.s3.object.key);
     generateDigest(bucket, key)

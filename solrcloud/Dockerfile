@@ -1,3 +1,2 @@
-FROM solr:7.5-alpine
-CMD [ "solr", "-f", "-cloud" ]
-HEALTHCHECK --interval=10s --timeout=10s --start-period=5s --retries=3 CMD [ "echo", "stat", "|", "nc", "localhost", "9983" ]
+FROM solr:8.11.1-slim
+RUN sed -i.bak 's/level="info"/level="warn"/' /var/solr/log4j2.xml

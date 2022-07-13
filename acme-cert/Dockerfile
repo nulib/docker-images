@@ -17,7 +17,8 @@ RUN git clone https://github.com/acmesh-official/acme.sh.git \
 
 WORKDIR /root/.acme.sh
 
-RUN ./acme.sh --set-default-ca --server letsencrypt
+RUN mkdir certs \
+ && ./acme.sh --set-default-ca --server letsencrypt
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]

@@ -1,0 +1,8 @@
+FROM nulib/ldap-alpine:latest
+ADD seeds /tmp/seeds
+RUN apk add openldap-clients \
+ && /tmp/seeds/seed.sh \
+ && rm -rf /tmp/seeds \
+ && apk del openldap-clients
+EXPOSE 389 636
+ENTRYPOINT /usr/bin/supervisord

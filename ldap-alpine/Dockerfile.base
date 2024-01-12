@@ -1,16 +1,17 @@
 FROM alpine AS build
-RUN apk add alpine-sdk
+RUN apk add alpine-sdk sudo
 RUN adduser -D build
 RUN addgroup build abuild
 RUN echo -e "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER build
 WORKDIR /home/build
 RUN abuild-keygen -a -i -n
+ARG APORTS_REF
 RUN . /etc/os-release \
- && git clone --branch=v${VERSION_ID} --depth=1 git://git.alpinelinux.org/aports
+ && git clone --branch=${APORTS_REF} --depth=1 git://git.alpinelinux.org/aports
 WORKDIR /home/build/aports/main/samba
 RUN sed -i '/libmsrpc3-samba4\.so/a \\t\tusr/lib/$pkgname/libntvfs-samba4.so \\' APKBUILD
-RUN sed -i '/\.\/configure/a \\t\t--with-ntvfs-fileserver \\' APKBUILD
+RUN sed -i '/\.\/configure/a \\t\t--enable-selftest \\' APKBUILD
 RUN abuild -r
 
 FROM alpine

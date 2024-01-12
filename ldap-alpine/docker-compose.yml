@@ -2,11 +2,31 @@ version: "3.2"
 volumes:
   ldap:
 services:
+  base:
+    image: nulib/ldap-alpine:base
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+      args:
+        APORTS_REF: v3.11.4
+      platforms:
+        - linux/amd64
+        - linux/arm64
   ldap:
     image: nulib/ldap-alpine:latest
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+        - linux/arm64
     volumes:
       - ldap:/var/lib/samba
     ports:
       - 389:389
       - 636:636
+  seeded:
+    image: nulib/ldap-alpine:seeded
+    build:
+      context: .
+      dockerfile: Dockerfile.seeded
